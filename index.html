@@ -3,1224 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will It Rain On My Parade? - Floating Search Card</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>EventSafe - AI-Powered Event Weather Safety</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles based on a MODERN, HIGH-CONTRAST, TEAL/NAVY AESTHETIC */
-        :root {
-            --bg-neutral: #f8f9fa; /* Ghost White/Near White Background */
-            --text-title-dark: #181a3a; /* Deep Navy Blue for Title/Main Text */
-            --text-title-light: #4a4e69; /* Muted Navy for Subtitle */
-            --text-subtitle: #6c757d; /* Standard Gray for Secondary Text */
-            --text-dark: #343a40; /* Darker Gray text */
-            --card-bg: #ffffff; /* Crisp White card background */
-            --btn-color: #00bcd4; /* Vibrant Cyan/Teal for SEARCH/Accent */
-            --btn-hover: #00a0b0; /* Slightly darker Cyan on hover */
-            --input-border: #adb5bd; /* Muted Gray border */
-            --risk-low: #10b981; /* Green */
-            --risk-moderate: #ffb700; /* Amber/Yellow */
-            --risk-high: #ef4444; /* Red */
-        }
-        
-        /* --- BACKGROUND IMAGE ADDITION --- */
-        body {
-            font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            
-            /* Background Image Setup */
-            background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center bottom; 
-            background-attachment: fixed; /* Parallax scrolling effect */
-            
-            /* Fallback color if image fails and ensures card contrast */
-            background-color: #e9ecef;
-        }
-
-        /* Container to hold content with a semi-transparent dark overlay for readability */
-        .content-wrapper {
-            background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white overlay */
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
-            padding: 4rem 2rem;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        /* --- STYLIZED TITLE EFFECT (Deep Navy Gradient) --- */
-        .wirm-title {
-            font-family: 'Times New Roman', Times, serif; 
-            font-size: 5rem;
-            line-height: 1;
-            font-weight: 900;
-            text-align: center;
-            letter-spacing: -0.01em; 
-            text-transform: uppercase;
-            
-            /* Complex shadow layers for 3D/bevel effect */
-            text-shadow: 
-                0 6px 12px rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(0, 0, 0, 0.05),
-                0 -1px 1px rgba(255, 255, 255, 0.7); 
-            
-            /* TEXT GRADIENT STYLES: Deep Navy to Muted Navy */
-            background: linear-gradient(to bottom, var(--text-title-dark) 30%, var(--text-title-light) 70%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: var(--text-title-dark); /* Fallback color */
-        }
-
-        .wirm-title span.part1, .wirm-title span.part2 {
-            color: transparent; 
-            display: block;
-        }
-        
-        .wirm-title span.part2 {
-            margin-top: -0.2em;
-        }
-
-        /* Subtitle style */
-        .wirm-subtitle {
-             color: var(--text-subtitle);
-             font-weight: 500;
-        }
-
-        /* Mobile adjustments for title */
-        @media (max-width: 640px) {
-            .wirm-title {
-                font-size: 3rem;
-            }
-            .wirm-title span.part2 {
-                 margin-top: -0.1em;
-            }
-        }
-        
-        /* Input Card and Button Styles */
-        .input-card {
-            background-color: var(--card-bg);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
-            padding: 1.5rem 1.5rem; 
-        }
-
-        .input-field-container {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 0.25rem; 
-            border-bottom: 1px solid var(--input-border); 
-            flex-grow: 1;
-        }
-
-        .input-field {
-            border: none;
-            color: var(--text-dark);
-            background-color: transparent; 
+        * {
+            margin: 0;
             padding: 0;
-            margin-left: 0.5rem;
-        }
-        
-        .input-label {
-             font-size: 0.75rem; /* text-xs */
-             margin-bottom: 0.25rem; /* mb-1 */
-             text-transform: uppercase;
-             letter-spacing: 0.05em;
-             color: #6c757d; /* Standard Gray */
+            box-sizing: border-box;
         }
 
-        .btn-search {
-            background-color: var(--btn-color);
-            color: white;
-            transition: background-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(0, 188, 212, 0.3); /* Teal shadow */
-            height: 100%; 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+            color: #fff;
+            overflow-x: hidden;
         }
-        .btn-search:hover {
-            background-color: var(--btn-hover); 
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        
-        /* Forecast Card Styles */
-        .weather-info-card, .forecast-item {
-            background-color: #ffffff; /* Crisp white */
-            border: 1px solid #dee2e6; /* Light gray border */
-            color: var(--text-dark);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+        header {
+            padding: 20px 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
-        
-        /* Celestial Outlook Specific Styles - Dark Theme Retained but enriched */
-        .celestial-info-card {
-            background-color: #1f2937; /* Deep Indigo/Dark Slate */
-            color: #f3f4f6; /* Light Text */
-            border: 1px solid #374151;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .celestial-metric {
-            border-right: 1px solid #374151;
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
         }
-        .celestial-metric:last-child {
-            border-right: none;
+
+        .logo::before {
+            content: "⛅";
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
         }
 
 
-        .error-message {
-            background-color: #ffe0e6; /* Light Rose/Red */
-            border-left: 5px solid var(--risk-high); /* Bright Red */
-            color: #8b0000; /* Dark Red Text */
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-        }
 
-        /* UV Index Specific Styling - Use Risk Colors */
-        .uv-low { color: var(--risk-low); } 
-        .uv-moderate { color: var(--risk-moderate); } 
-        .uv-high { color: var(--risk-high); } 
-        
-        /* Air Quality Styling - Use Risk Colors */
-        .air-good { color: var(--risk-low); }
-        .air-moderate { color: var(--risk-moderate); }
-        .air-poor { color: var(--risk-high); }
-
-        /* Event Safety Score Styling - Use Risk Colors and Accent Color */
-        .score-circle {
+        .hero {
+            padding: 120px 0;
+            text-align: center;
             position: relative;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            /* Gradient color will be dynamically set by JS */
-            background: conic-gradient(
-                var(--risk-low) 0% 0%, 
-                var(--risk-low) var(--score), 
-                #e9ecef var(--score) 100% /* Very light gray for empty space */
-            );
+        }
+
+        .hero h1 {
+            font-size: 68px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            margin-bottom: 25px;
+            animation: fadeInUp 1s ease;
+            letter-spacing: -2px;
+            text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 45px;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease 0.2s backwards;
+            font-weight: 300;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 20px 50px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease 0.4s backwards;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.6);
+        }
+
+        .data-sources {
             display: flex;
-            align-items: center;
             justify-content: center;
+            gap: 25px;
+            margin-top: 60px;
+            animation: fadeInUp 1s ease 0.6s backwards;
+            flex-wrap: wrap;
         }
-        .score-inner {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 10px rgba(0,0,0,0.08) inset;
+
+        .source-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 700;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
         }
-        .score-text {
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 800; /* font-extrabold */
-            line-height: 1;
-            color: var(--text-title-dark); /* Use Navy for strong impact */
+
+        .source-badge:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
         }
+
+        .features {
+            background: rgba(14, 165, 233, 0.1);
+            padding: 100px 0;
+            backdrop-filter: blur(10px);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 52px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            margin-bottom: 70px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+            padding: 45px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(14, 165, 233, 0.3) 100%);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 56px;
+            margin-bottom: 25px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-card h3 {
+            font-size: 26px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
+        }
+
+        .feature-card p {
+            opacity: 0.95;
+            line-height: 1.7;
+            font-size: 15px;
+            font-weight: 300;
+        }
+
+        .demo-section {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .demo-section h2 {
+            font-size: 52px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            padding: 60px;
+            border-radius: 35px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-display {
+            font-size: 88px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            margin: 35px 0;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+        }
+
         .score-label {
-            font-size: 0.75rem; /* text-xs */
-            color: var(--text-subtitle); /* Standard Gray */
-            margin-top: 0.25rem;
-        }
-        
-        /* Info Box Style - Use Light Teal/Cyan for information */
-        .info-box {
-            background-color: #e0f7fa; /* Light Cyan */
-            border: 1px solid #00bcd4; /* Medium Cyan Border (Accent) */
-            color: #006064; /* Dark Cyan Text */
-        }
-        
-        .score-table th, .score-table td {
-            padding: 0.25rem 0.5rem;
-            text-align: left;
-            font-size: 0.875rem; /* text-sm */
-        }
-        
-        /* Updated Style for the "Know More" button - Uses the main accent color */
-        .btn-info-toggle, .btn-download {
-            background-color: var(--btn-color); /* Cyan/Teal */
-            color: white; 
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem; 
-            font-size: 0.875rem; /* text-sm */
+            font-size: 26px;
             font-weight: 600;
-            transition: background-color 0.15s;
-            display: inline-flex;
-            align-items: center;
-            line-height: 1; 
-            margin-top: 1rem; 
+            font-family: 'Outfit', sans-serif;
+            opacity: 0.95;
         }
-        .btn-info-toggle:hover, .btn-download:hover {
-            background-color: var(--btn-hover); 
+
+        footer {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 50px 0;
+            text-align: center;
+            margin-top: 100px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .btn-download-json {
-            background-color: #4a4e69; /* Muted Navy for JSON to contrast */
+
+        .footer-content {
+            opacity: 0.9;
+            font-weight: 300;
         }
-        .btn-download-json:hover {
-            background-color: #343a40; 
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .data-sources {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-container {
+                padding: 40px 25px;
+            }
+
+            .score-display {
+                font-size: 64px;
+            }
         }
     </style>
 </head>
-<body class="p-4">
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">EventSafe</div>
+        </nav>
+    </header>
 
-    <div class="content-wrapper">
-
-        <header class="w-full max-w-7xl mx-auto flex justify-between items-center py-4 px-6">
-            <div class="flex items-baseline space-x-2 text-xl font-bold">
-                <span class="tracking-widest" style="color: var(--text-title-dark);">WIRMP</span>
-                <span class="text-sm font-normal" style="color: var(--btn-color);">ISOBAR</span>
+    <section class="hero">
+        <div class="container">
+            <h1>Plan Events with Confidence</h1>
+            <p>AI-powered weather forecasting that predicts event safety using NASA, OpenWeather, and Open-Meteo data</p>
+            <a href="#" class="cta-button">Get Started Free</a>
+            
+            <div class="data-sources">
+                <div class="source-badge">🛰️ NASA Data</div>
+                <div class="source-badge">🌍 OpenWeather</div>
+                <div class="source-badge">📊 Open-Meteo</div>
             </div>
-            <nav class="space-x-4 font-medium text-sm flex items-center">
-                <a href="#" class="hover:text-gray-600" style="color: var(--text-title-light);">About Data</a>
-                <a href="#" class="hover:text-gray-600" style="color: var(--text-title-light);">API</a>
-            </nav>
-        </header>
-        
-        <main class="flex-grow flex flex-col items-center justify-start pt-16 pb-4">
-            <div class="w-full max-w-4xl">
-                <div class="wirm-title mb-4">
-                    <span class="part1">Will It Rain On My</span>
-                    <span class="part2">Parade?</span>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Powerful Features for Event Safety</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3>Event Safety Score</h3>
+                    <p>Get an intelligent safety score for your event based on comprehensive weather analysis and historical data patterns.</p>
                 </div>
-                <p class="text-center text-xl wirm-subtitle mb-12">
-                    Find Your Unspoiled Day
+
+                <div class="feature-card">
+                    <span class="feature-icon">📁</span>
+                    <h3>CSV & JSON Analysis</h3>
+                    <p>Upload your event data in CSV or JSON format and receive bulk safety assessments for multiple events instantly.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🌙</span>
+                    <h3>Celestial Outlook</h3>
+                    <p>Plan around moon phases, solar activity, and astronomical events that might impact your outdoor gatherings.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">💧</span>
+                    <h3>Water Content Prediction</h3>
+                    <p>Advanced precipitation forecasts including humidity, rainfall probability, and atmospheric moisture levels.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🤝</span>
+                    <h3>NGO Contacts</h3>
+                    <p>Direct access to emergency services, disaster relief organizations, and local support networks for rapid response.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">📈</span>
+                    <h3>Multi-Source Data</h3>
+                    <p>Combines data from NASA satellites, OpenWeather API, and Open-Meteo for unparalleled accuracy and reliability.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Real-Time Updates</h3>
+                    <p>Continuous monitoring and instant notifications as weather conditions change, keeping your events safe.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🗓️</span>
+                    <h3>Long-Range Forecasting</h3>
+                    <p>Plan months ahead with extended forecasts and seasonal weather patterns for better event scheduling.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🌐</span>
+                    <h3>Location-Based Disaster Alerts</h3>
+                    <p>Get real-time disaster warnings specific to your event location, including historical disaster data and risk assessments for that exact area.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section" id="demo">
+        <div class="container">
+            <h2>See It In Action</h2>
+            <div class="demo-container">
+                <p class="score-label">Sample Event Safety Score</p>
+                <div class="score-display">87/100</div>
+                <p style="margin-top: 20px; opacity: 0.95; font-weight: 300;">Based on weather conditions for outdoor wedding on July 15, 2025</p>
+                <p style="margin-top: 20px; font-size: 15px; opacity: 0.85; font-weight: 300; line-height: 1.8;">
+                    ✓ Low precipitation probability<br>
+                    ✓ Optimal temperature range<br>
+                    ✓ No severe weather alerts<br>
+                    ⚠ Moderate wind conditions
                 </p>
-
-                <div class="input-card rounded-xl mx-auto max-w-2xl w-full">
-                    <form id="weather-search-form" class="grid grid-cols-12 items-end">
-                        
-                        <div class="col-span-12 sm:col-span-5 p-4 border-r border-gray-200">
-                            <label for="location-input" class="input-label block">Location</label>
-                            <div class="input-field-container border-b-0 p-0">
-                                <input
-                                    type="text"
-                                    id="location-input"
-                                    placeholder="City Park, Beach, Venue..."
-                                    required
-                                    class="input-field w-full focus:outline-none"
-                                >
-                            </div>
-                        </div>
-                        
-                        <div class="col-span-6 sm:col-span-3 p-4 border-r border-gray-200">
-                            <label for="date-input" class="input-label block">Date</label>
-                            <div class="input-field-container border-b-0 p-0">
-                                <i data-lucide="calendar-check" class="w-4 h-4 text-gray-500 flex-shrink-0"></i>
-                                <input
-                                    type="text"
-                                    id="date-input"
-                                    placeholder="dd-mm-yyyy"
-                                    onfocus="(this.type='date')"
-                                    onblur="(this.type.value='text')"
-                                    class="input-field w-full focus:outline-none"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-2 p-4 border-r border-gray-200">
-                            <label for="time-input" class="input-label block">Time (Optional)</label>
-                            <div class="input-field-container border-b-0 p-0">
-                                <i data-lucide="clock" class="w-4 h-4 text-gray-500 flex-shrink-0"></i>
-                                <input
-                                    type="text"
-                                    id="time-input"
-                                    placeholder="--:--"
-                                    onfocus="(this.type='time')"
-                                    onblur="(this.type.value='text')"
-                                    class="input-field w-full focus:outline-none"
-                                >
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            id="search-button"
-                            class="btn-search col-span-12 sm:col-span-2 py-4 px-4 rounded-r-xl rounded-l-none sm:rounded-l-none font-semibold text-sm h-full"
-                        >
-                            SEARCH
-                        </button>
-                    </form>
-                    <div id="error-container" class="mt-4 px-4 hidden"></div>
-                </div>
-
-                <div id="weather-display" class="w-full mt-12 max-w-4xl mx-auto">
-                    
-                    <div id="loading-spinner" class="hidden text-center mt-12">
-                        <div class="animate-spin inline-block w-8 h-8 border-4 border-gray-700 border-t-transparent rounded-full" style="border-color: var(--text-title-dark); border-top-color: transparent;"></div>
-                        <p class="mt-3 text-lg" style="color: var(--text-title-dark);">Calculating parade risk and fetching NASA data...</p>
-                    </div>
-
-                    <div id="current-weather-card" class="weather-info-card p-6 rounded-xl mb-6 hidden">
-                        <h2 id="current-location" class="text-2xl font-bold mb-4" style="color: var(--text-title-dark);"></h2>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            
-                            <div class="flex flex-col items-center justify-center border-r border-gray-200 pr-6">
-                                <div class="flex items-center justify-center mb-2">
-                                    <p class="text-lg font-semibold" style="color: var(--text-title-light);">Event Safety Score</p>
-                                </div>
-                                
-                                <div id="safety-score-display" class="score-circle" style="--score: 0%;">
-                                    <div class="score-inner">
-                                        <span id="event-safety-score" class="score-text">0%</span>
-                                        <span class="score-label">Ideal Weather</span>
-                                    </div>
-                                </div>
-
-                                <button onclick="toggleInfoBox()" class="btn-info-toggle text-xs">
-                                    Risk Factors <i data-lucide="chevron-down" class="w-3 h-3 ml-1"></i>
-                                </button>
-                                
-                                <div class="flex space-x-2 mt-4">
-                                     <button onclick="downloadData('json')" class="btn-download btn-download-json text-xs">
-                                        <i data-lucide="download" class="w-3 h-3 mr-1"></i> JSON
-                                    </button>
-                                     <button onclick="downloadData('csv')" class="btn-download text-xs">
-                                        <i data-lucide="download" class="w-3 h-3 mr-1"></i> CSV
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="text-center md:text-left flex flex-col justify-center">
-                                <div class="flex items-center space-x-4 justify-center md:justify-start">
-                                    <span id="current-icon" class="text-6xl">☀</span>
-                                    <div>
-                                        <p id="current-temperature" class="text-3xl font-extrabold" style="color: var(--text-title-dark);"></p>
-                                        <p id="current-summary" class="text-lg text-gray-600"></p>
-                                        <p id="current-cloud-cover" class="text-sm text-gray-600"></p>
-                                    </div>
-                                </div>
-                                <div class="mt-4 text-center md:text-left">
-                                    <p class="text-lg text-gray-600 mb-1">Max Rain Probability:</p>
-                                    <p id="current-rain-prob-main" class="text-3xl font-extrabold" style="color: var(--btn-color);">0%</p>
-                                    <p id="current-rain-amount-main" class="text-base font-semibold text-gray-700 mt-1"></p>
-                                </div>
-                            </div>
-
-                            <div class="text-center md:text-right flex flex-col justify-center border-l border-gray-200 pl-6">
-                                 <p class="text-sm text-gray-600 mb-2">Detailed Forecast & NASA Data</p>
-                                 <div class="space-y-1">
-                                    <p class="text-sm text-gray-600">Wind: <span id="current-wind" class="text-base font-medium" style="color: var(--text-title-dark);"></span></p>
-                                    <p class="text-sm text-gray-600">Humidity: <span id="current-humidity" class="text-base font-medium" style="color: var(--text-title-dark);"></span></p>
-                                    <p class="text-sm text-gray-600">Max Temp: <span id="current-max-temp" class="text-base font-medium" style="color: var(--text-title-dark);"></span></p>
-                                    <p class="text-sm text-gray-600">Max UV: <span id="current-uv-index" class="text-base font-medium" style="color: var(--text-title-dark);"></span></p>
-                                    
-                                    <p class="text-sm text-gray-600">Air Quality (AOD): <span id="current-air-quality" class="text-base font-medium" style="color: var(--text-title-dark);"></span></p>
-                                    
-                                    <p class="text-sm text-gray-600">Ground Risk: <span id="current-ground-risk" class="text-base font-medium" style="color: var(--text-title-dark);"></span></p>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        
-                        <div id="score-info-box" class="info-box p-4 rounded-lg mt-6 hidden">
-                            <div class="flex justify-between items-start mb-2">
-                                <h4 class="font-bold text-base flex items-center">
-                                    <i data-lucide="target" class="w-4 h-4 mr-2"></i> Event Safety Score Risk Interpretation
-                                </h4>
-                                <button onclick="toggleInfoBox()" class="text-gray-600 hover:text-gray-800">
-                                    <i data-lucide="x" class="w-5 h-5"></i>
-                                </button>
-                            </div>
-                            <p class="text-sm mb-3">The score is calculated based on deductions for **Precipitation, Max Wind Speed, Max UV Index, Air Quality, and Ground Conditions**. **A higher score indicates safer, more suitable weather.**</p>
-                            
-                            <table class="score-table w-full border-collapse">
-                                <thead>
-                                    <tr style="background-color: #00bcd41a;">
-                                        <th class="font-semibold rounded-tl-lg">Score Range</th>
-                                        <th class="font-semibold rounded-tr-lg">Text Description (Displayed)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr style="background-color: rgba(16, 185, 129, 0.1);">
-                                        <td class="font-bold">85% - 100%</td>
-                                        <td>Excellent Conditions</td>
-                                    </tr>
-                                    <tr style="background-color: rgba(16, 185, 129, 0.05);">
-                                        <td class="font-bold">70% - 84%</td>
-                                        <td>Good, with minor risks</td>
-                                    </tr>
-                                    <tr style="background-color: rgba(255, 183, 0, 0.1);">
-                                        <td class="font-bold">50% - 69%</td>
-                                        <td>Moderate Risk - Be prepared</td>
-                                    </tr>
-                                    <tr style="background-color: rgba(239, 68, 68, 0.1);">
-                                        <td class="font-bold">30% - 49%</td>
-                                        <td>High Risk - Consider postponement</td>
-                                    </tr>
-                                    <tr style="background-color: rgba(239, 68, 68, 0.2);">
-                                        <td class="font-bold rounded-bl-lg">0% - 29%</td>
-                                        <td class="rounded-br-lg">Very High Risk - Dangerous weather</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <p id="coordinates" class="mt-4 text-xs text-gray-500 border-t pt-2"></p>
-                    </div>
-                    
-                    <div id="celestial-outlook-card" class="celestial-info-card p-6 rounded-xl mt-6 hidden">
-                        <h3 class="text-xl font-bold mb-4 flex items-center text-indigo-300">
-                            <i data-lucide="moon-star" class="w-5 h-5 mr-2 text-yellow-300"></i> Celestial Event & Visibility Outlook
-                        </h3>
-                        
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-b border-gray-700 pb-4 mb-4">
-                            <div class="celestial-metric">
-                                <p class="text-sm text-gray-400">Sunrise</p>
-                                <p id="celestial-sunrise" class="text-lg font-bold text-white"></p>
-                            </div>
-                            <div class="celestial-metric">
-                                <p class="text-sm text-gray-400">Sunset</p>
-                                <p id="celestial-sunset" class="text-lg font-bold text-white"></p>
-                            </div>
-                            <div class="celestial-metric">
-                                <p class="text-sm text-gray-400">Moon Phase</p>
-                                <p id="celestial-moon-phase" class="text-lg font-bold text-white"></p>
-                            </div>
-                            <div class="celestial-metric border-r-0">
-                                <p class="text-sm text-gray-400">Dark Sky Start</p>
-                                <p id="celestial-dark-start" class="text-lg font-bold text-white"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-800/50 p-3 rounded-lg">
-                            <p class="text-sm text-gray-300 font-semibold flex items-center">
-                                <i data-lucide="telescope" class="w-4 h-4 mr-2 text-cyan-400"></i> Astronomical Note:
-                            </p>
-                            <p id="celestial-main-event" class="text-base text-cyan-200 font-medium mt-2 sm:mt-0 text-center sm:text-right">
-                                Cloud cover may affect viewing.
-                            </p>
-                        </div>
-                    </div>
-                    <h3 id="forecast-header" class="text-xl font-bold mb-4 mt-8 hidden" style="color: var(--text-title-dark);">7-Day Precipitation Outlook</h3>
-                    <div id="forecast-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
-                        </div>
-                    
-                </div>
             </div>
-        </main>
-    </div> <script type="module">
-        // Global variables for convenience
-        const form = document.getElementById('weather-search-form');
-        const locationInput = document.getElementById('location-input');
-        const dateInput = document.getElementById('date-input');
-        const timeInput = document.getElementById('time-input');
-        const searchButton = document.getElementById('search-button');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const errorContainer = document.getElementById('error-container');
-        const currentWeatherCard = document.getElementById('current-weather-card');
-        const celestialOutlookCard = document.getElementById('celestial-outlook-card'); 
-        const forecastGrid = document.getElementById('forecast-grid');
-        const forecastHeader = document.getElementById('forecast-header');
-        const scoreInfoBox = document.getElementById('score-info-box');
-        
-        // Storage for the last fetched data for download functionality
-        let lastWeatherData = null;
-        let lastNasaData = null;
-        let lastCelestialData = null;
-        let lastSafetyScores = [];
+        </div>
+    </section>
 
+    <footer>
+        <div class="container footer-content">
+            <p style="font-size: 16px; font-weight: 400;">&copy; 2025 EventSafe. All rights reserved.</p>
+            <p style="margin-top: 12px; font-size: 14px;">Powered by NASA, OpenWeather, and Open-Meteo</p>
+        </div>
+    </footer>
 
-        // --- NEW FUNCTION: Data Download Logic ---
-        window.downloadData = function(format) {
-            if (!lastWeatherData) {
-                displayError("No data available to download. Please perform a search first.");
-                return;
-            }
-
-            const locationName = locationInput.value.trim().replace(/[^a-z0-9]/gi, '_').toLowerCase();
-            const dateStr = dateInput.value.replace(/-/g, '');
-            const filename = `wirmp_data_${locationName}_${dateStr}.${format}`;
-            let dataString = '';
-            let mimeType = '';
-
-            const dataToDownload = {
-                location: locationName,
-                date: dateInput.value,
-                safetyScores: lastSafetyScores,
-                nasaData: lastNasaData,
-                celestialData: lastCelestialData,
-                dailyForecast: {
-                    time: lastWeatherData.daily.time,
-                    max_temp_c: lastWeatherData.daily.temperature_2m_max,
-                    min_temp_c: lastWeatherData.daily.temperature_2m_min,
-                    rain_prob_percent: lastWeatherData.daily.precipitation_probability_max,
-                    wind_speed_max_kmh: lastWeatherData.daily.wind_speed_10m_max,
-                    uv_index_max: lastWeatherData.daily.uv_index_max,
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
-            };
-
-            if (format === 'json') {
-                dataString = JSON.stringify(dataToDownload, null, 2);
-                mimeType = 'application/json';
-            } else if (format === 'csv') {
-                // Generate CSV from the daily forecast array
-                const header = [
-                    "Date", "Max Temp (°C)", "Min Temp (°C)", "Rain Prob (%)", "Max Wind (km/h)", "Max UV", "Safety Score (%)"
-                ];
-                let rows = [header.join(',')];
-                
-                for(let i = 0; i < dataToDownload.dailyForecast.time.length; i++) {
-                    const row = [
-                        dataToDownload.dailyForecast.time[i],
-                        dataToDownload.dailyForecast.max_temp_c[i],
-                        dataToDownload.dailyForecast.min_temp_c[i],
-                        dataToDownload.dailyForecast.rain_prob_percent[i],
-                        dataToDownload.dailyForecast.wind_speed_max_kmh[i],
-                        dataToDownload.dailyForecast.uv_index_max[i],
-                        lastSafetyScores[i] ? lastSafetyScores[i].score : 'N/A' 
-                    ];
-                    rows.push(row.join(','));
-                }
-                dataString = rows.join('\n');
-                mimeType = 'text/csv';
-            }
-
-            // Create a blob and trigger download
-            const blob = new Blob([dataString], { type: mimeType });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Re-create lucide icons if they were inside the download buttons
-            lucide.createIcons();
-        }
-
-
-        // --- Toggle Info Box Visibility ---
-        window.toggleInfoBox = function() {
-            scoreInfoBox.classList.toggle('hidden');
-            // Re-create icons inside the newly visible box if needed (for lucide icons)
-            if (!scoreInfoBox.classList.contains('hidden')) {
-                 lucide.createIcons();
-            }
-        }
-        
-        // --- Utility Functions (Same as before) ---
-
-        /**
-         * Simple Geocoding function using Open-Meteo's free service.
-         */
-        async function geocodeLocation(locationName) {
-            const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=1&language=en&format=json`;
-
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Geocoding failed with status: ${response.status}`);
-                }
-                const data = await response.json();
-
-                if (!data.results || data.results.length === 0) {
-                    throw new Error(`Location "${locationName}" not found.`);
-                }
-
-                const result = data.results[0];
-                return {
-                    lat: result.latitude,
-                    lon: result.longitude,
-                    name: `${result.name}, ${result.country}`,
-                    elevation: result.elevation || 0,
-                };
-
-            } catch (error) {
-                console.error("Geocoding API error:", error);
-                throw new Error("Could not find that location. Please try a different city name.");
-            }
-        }
-        
-        /**
-         * Converts Open-Meteo weather codes to a descriptive string and emoji icon.
-         */
-        function getWeatherInterpretation(code) {
-            // Simplified WMO Weather Interpretation Codes (WMO CODE)
-            switch (code) {
-                case 0: return { summary: "Clear sky", icon: "☀" };
-                case 1:
-                case 2: return { summary: "Mainly clear", icon: "🌤" };
-                case 3: return { summary: "Overcast", icon: "☁" };
-                case 45: 
-                case 48: return { summary: "Fog/Rime", icon: "🌫" };
-                case 51:
-                case 53:
-                case 55: return { summary: "Drizzle", icon: "🌧" };
-                case 56: 
-                case 57: return { summary: "Freezing Drizzle", icon: "🌧" };
-                case 61: 
-                case 63: 
-                case 65: return { summary: "Rain", icon: "☔" };
-                case 66: 
-                case 67: return { summary: "Freezing Rain", icon: "🥶🌧" };
-                case 71: 
-                case 73: 
-                case 75: return { summary: "Snow", icon: "❄" };
-                case 77: return { summary: "Snow Grains", icon: "🌨" };
-                case 80: 
-                case 81: 
-                case 82: return { summary: "Showers", icon: "🚿" };
-                case 85: 
-                case 86: return { summary: "Snow Showers", icon: "🌨" };
-                case 95: return { summary: "Thunderstorm", icon: "⛈" };
-                case 96: 
-                case 99: return { summary: "Thunderstorm with Hail", icon: "🌩" };
-                default: return { summary: "Unknown", icon: "❓" };
-            }
-        }
-        
-        /**
-         * Returns UV Index risk class and description.
-         */
-        function getUvInterpretation(uvIndex) {
-            if (uvIndex <= 2) {
-                return { class: 'uv-low', description: 'Low Risk' };
-            } else if (uvIndex <= 5) {
-                return { class: 'uv-moderate', description: 'Moderate Risk' };
-            } else if (uvIndex <= 7) {
-                return { class: 'uv-high', description: 'High Risk' };
-            } else {
-                return { class: 'uv-high', description: 'Very High Risk' };
-            }
-        }
-        
-        /**
-         * Returns an icon based on cloud cover percentage.
-         */
-        function getCloudCoverIcon(cloudCover) {
-            if (cloudCover < 20) return '☀️';
-            if (cloudCover < 50) return '🌥️';
-            if (cloudCover < 80) return '☁️';
-            return ' overcast';
-        }
-        
-        /**
-         * Returns Air Quality risk class and description based on a simulated AOD value.
-         */
-        function getAirQualityInterpretation(aod) {
-            if (aod < 0.2) {
-                return { class: 'air-good', description: 'Good' };
-            } else if (aod < 0.5) {
-                return { class: 'air-moderate', description: 'Moderate' };
-            } else {
-                return { class: 'air-poor', description: 'Poor' };
-            }
-        }
-
-        // --- Event Safety Score Calculation ---
-
-        /**
-         * Calculates a percentage score (0-100) indicating weather suitability for an outdoor event.
-         */
-        function calculateEventSafetyScore(rainProb, maxWind, uvIndex, airQualityAOD, hasSnowCover, soilMoisture) {
-            let score = 100;
-            let deductionReason = [];
-
-            // 1. Precipitation Deduction (Max 50 points)
-            const rainDeduction = Math.min(50, rainProb / 2); 
-            score -= rainDeduction;
-            if (rainDeduction > 0) {
-                 deductionReason.push(`${rainProb}% Rain Probability`);
-            }
-            
-            // 2. Wind Speed Deduction (Max 30 points)
-            const WIND_THRESHOLD = 30; // Strong wind threshold (km/h)
-            if (maxWind > WIND_THRESHOLD) {
-                const windDeduction = Math.min(30, (maxWind - WIND_THRESHOLD) * 2 + 10);
-                score -= windDeduction;
-                deductionReason.push(`${maxWind} km/h Wind`);
-            } else if (maxWind > 15) {
-                const windDeduction = Math.min(10, (maxWind - 15) / 2);
-                 score -= windDeduction;
-            }
-
-            // 3. UV Index Deduction (Max 20 points)
-            if (uvIndex >= 6 && uvIndex <= 7) {
-                score -= 5;
-                deductionReason.push(`High UV ${uvIndex}`);
-            } else if (uvIndex > 7) {
-                const uvDeduction = Math.min(20, 10 + (uvIndex - 7) * 5);
-                score -= uvDeduction;
-                deductionReason.push(`Extreme UV ${uvIndex}`);
-            }
-            
-            // --- NASA DATA DEDUCTIONS (PLACEHOLDERS) ---
-            
-            // 4. Air Quality (AOD) Deduction (NASA DISCOVR/EPIC Aerosol Optical Depth) (Max 15 points)
-            if (airQualityAOD > 0.4) {
-                 const aodDeduction = Math.min(15, (airQualityAOD - 0.4) * 30);
-                 score -= aodDeduction;
-                 deductionReason.push(`Poor Air Quality (AOD ${airQualityAOD.toFixed(2)})`);
-            }
-            
-            // 5. Ground Condition Deduction (NASA Snow Cover/Soil Moisture) (Max 20 points)
-            if (hasSnowCover) {
-                score -= 20; // Heavy penalty for snow cover
-                deductionReason.push('Snow Cover');
-            } else if (soilMoisture > 0.8) { 
-                 score -= 10; // Moderate penalty for very wet ground
-                 deductionReason.push('Saturated Ground');
-            }
-            
-            // --- End NASA Data Deductions ---
-
-
-            score = Math.max(0, Math.min(100, Math.round(score)));
-
-            let safetyText = "Excellent Conditions";
-            if (score < 85) safetyText = "Good, with minor risks";
-            if (score < 70) safetyText = "Moderate Risk - Be prepared";
-            if (score < 50) safetyText = "High Risk - Consider postponement";
-            if (score < 30) safetyText = "Very High Risk - Dangerous weather";
-            
-            if (score < 70 && deductionReason.length > 0) {
-                 safetyText = deductionReason[0].split(' ')[0] + " Risk";
-            }
-            
-            return { score, text: safetyText };
-        }
-
-
-        /**
-         * Fetches real weather data from Open-Meteo.
-         */
-        async function fetchRealWeatherForecast(lat, lon, elevation, startDate) {
-            const params = new URLSearchParams({
-                latitude: lat,
-                longitude: lon,
-                elevation: elevation,
-                timezone: "auto", 
-                models: "gfs_seamless", 
-                daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,relative_humidity_2m_max,uv_index_max,daylight_duration,sunrise,sunset",
-                current: "temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,cloud_cover",
-                hourly: "is_day", // Used for dark sky start simulation
-                forecast_days: 7, 
             });
-
-            const url = `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
-
-            try {
-                const response = await fetchWithExponentialBackoff(url);
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Weather API request failed: ${response.status} - ${errorText}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error("Weather API error:", error);
-                throw new Error("Failed to retrieve weather data from the service.");
-            }
-        }
-        
-        /**
-         * Placeholder for fetching 3 additional NASA datasets.
-         */
-        async function fetchNasaData(lat, lon, dateValue, weatherData) {
-            // Simulated Data based on fetched weather for a seamless demo
-            const daily = weatherData.daily;
-            const todayIndex = daily.time.findIndex(t => t === dateValue);
-            const dataIndex = todayIndex !== -1 ? todayIndex : 0;
-            const rainProb = daily.precipitation_probability_max[dataIndex];
-            const uvIndex = daily.uv_index_max[dataIndex];
-            const isCold = daily.temperature_2m_min[dataIndex] < 0;
-
-            let airQualityAOD = 0.15; // Default Good
-            if (rainProb > 50) airQualityAOD = 0.1; 
-            if (uvIndex > 7) airQualityAOD = Math.min(1.0, 0.4 + Math.random() * 0.4); 
-
-            let hasSnowCover = isCold && weatherData.daily.weather_code[dataIndex] >= 70; 
-            
-            let soilMoisture = Math.min(1.0, rainProb / 100 + 0.3 + Math.random() * 0.1); 
-
-            return {
-                airQualityAOD,      
-                hasSnowCover,       
-                soilMoisture        
-            };
-        }
-        
-        /**
-         * NEW: Placeholder for fetching Celestial Data (Simulated).
-         */
-        async function fetchCelestialData(dateValue, lat, lon, weatherData) {
-            const daily = weatherData.daily;
-            const todayIndex = daily.time.findIndex(t => t === dateValue);
-            const dataIndex = todayIndex !== -1 ? todayIndex : 0;
-            const cloudCover = weatherData.current.cloud_cover;
-
-            const sunriseUTC = daily.sunrise[dataIndex];
-            const sunsetUTC = daily.sunset[dataIndex];
-            
-            // Determine Moon Phase (Simulated based on date, real API would be better)
-            const dateObj = new Date(dateValue);
-            const startOfYear = new Date(dateObj.getFullYear(), 0, 1);
-            const daysSinceJan1 = Math.floor((dateObj - startOfYear) / 86400000);
-
-            // Simple approximation of moon phase based on 29.5-day cycle
-            const SYNODIC_PERIOD = 29.53059;
-            const REFERENCE_DATE = new Date('2024-01-11'); // Date of a known New Moon
-            const daysFromRef = (dateObj - REFERENCE_DATE) / 86400000;
-            const currentPhaseDays = daysFromRef % SYNODIC_PERIOD;
-            
-            let moonPhase = 'Waxing Crescent 🌙';
-            if (currentPhaseDays < 1.84) moonPhase = 'New Moon (Excellent for Stars) ⚫';
-            else if (currentPhaseDays < 5.53) moonPhase = 'Waxing Crescent 🌙';
-            else if (currentPhaseDays < 9.22) moonPhase = 'First Quarter 🌓';
-            else if (currentPhaseDays < 12.91) moonPhase = 'Waxing Gibbous 🌔';
-            else if (currentPhaseDays < 16.60) moonPhase = 'Full Moon (Bright) 🌕';
-            else if (currentPhaseDays < 20.29) moonPhase = 'Waning Gibbous 🌖';
-            else if (currentPhaseDays < 23.98) moonPhase = 'Last Quarter 🌗';
-            else if (currentPhaseDays < 27.67) moonPhase = 'Waning Crescent 🌘';
-            
-            // Dark Sky Start (Approximate using Open-Meteo's is_day hourly data)
-            let darkSkyTime = "N/A";
-            const hourly = weatherData.hourly;
-            const startTime = new Date(`${dateValue}T12:00:00Z`).getTime(); 
-            for (let i = 0; i < hourly.time.length; i++) {
-                const hourTime = new Date(hourly.time[i]).getTime();
-                if (hourTime >= startTime && hourly.is_day[i] === 0) {
-                    // is_day switches to 0 (night)
-                    darkSkyTime = new Date(hourly.time[i]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    break;
-                }
-            }
-            
-            // Main Celestial Event (Simulated)
-            let mainEvent = "Perfectly clear night with no major events.";
-            if (cloudCover > 70) {
-                mainEvent = "High cloud cover (Telescope risk). Stars may be obscured.";
-            } else if (moonPhase.includes('Full Moon')) {
-                mainEvent = "Full Moon tonight! Great visibility, but light pollution will wash out dimmer stars.";
-            } else if (moonPhase.includes('New Moon')) {
-                 mainEvent = "New Moon tonight! Ideal dark sky conditions for stargazing/astrophotography.";
-            } else if (daysSinceJan1 % 45 === 0) {
-                 mainEvent = "Major meteor shower visibility is high tonight! 🌠";
-            }
-            
-
-            return {
-                sunrise: new Date(sunriseUTC).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                sunset: new Date(sunsetUTC).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                moonPhase: moonPhase,
-                darkSkyStart: darkSkyTime,
-                mainEvent: mainEvent
-            };
-        }
-
-
-        /**
-         * Generic fetch wrapper with exponential backoff for API robustness.
-         */
-        async function fetchWithExponentialBackoff(url, options = {}, maxRetries = 5, delay = 1000) {
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status !== 429) { 
-                        return response;
-                    }
-                } catch (error) {
-                    if (i === maxRetries - 1) throw error;
-                }
-                
-                await new Promise(resolve => setTimeout(resolve, delay));
-                delay *= 2; 
-            }
-            throw new Error("Max retries exceeded for API call.");
-        }
-
-
-        // --- Render Functions ---
-
-        /**
-         * Renders the current/selected day's weather summary, including NASA data.
-         */
-        function renderCurrentWeather(weatherData, nasaData, safetyScore, locationName, lat, lon) {
-            const current = weatherData.current;
-            const daily = weatherData.daily;
-            const dateValue = dateInput.value;
-            
-            const todayIndex = daily.time.findIndex(t => t === dateValue);
-            const dataIndex = todayIndex !== -1 ? todayIndex : 0;
-
-            const selectedDayForecast = {
-                temp_max: daily.temperature_2m_max[dataIndex],
-                temp_min: daily.temperature_2m_min[dataIndex],
-                weather_code: daily.weather_code[dataIndex],
-                rain_prob: daily.precipitation_probability_max[dataIndex],
-                rain_sum: daily.precipitation_sum[dataIndex],
-                uv_index: daily.uv_index_max[dataIndex],
-                max_wind: daily.wind_speed_10m_max[dataIndex], 
-            }
-
-            const dailyInterpretation = getWeatherInterpretation(selectedDayForecast.weather_code);
-            const uvInterpretation = getUvInterpretation(selectedDayForecast.uv_index); 
-            const airQualityInterpretation = getAirQualityInterpretation(nasaData.airQualityAOD);
-            
-            // --- Display Event Safety Score ---
-            const scoreCircle = document.getElementById('safety-score-display');
-            const scoreText = document.getElementById('event-safety-score');
-            const scoreLabel = scoreText.nextElementSibling;
-            
-            let scoreColor = 'var(--risk-low)'; 
-            if (safetyScore.score < 80) scoreColor = 'var(--risk-moderate)'; 
-            if (safetyScore.score < 50) scoreColor = 'var(--risk-high)'; 
-            
-            scoreCircle.style.setProperty('--score', `${safetyScore.score}%`);
-            scoreCircle.style.background = `conic-gradient(${scoreColor} 0% ${safetyScore.score}%, #e9ecef ${safetyScore.score}% 100%)`; // Dynamic update
-            scoreText.textContent = `${safetyScore.score}%`;
-            scoreText.style.color = scoreColor;
-            scoreLabel.textContent = safetyScore.text;
-
-
-            // Update other DOM elements
-            document.getElementById('current-location').textContent = `${locationName} - ${new Date(dateValue).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
-            
-            document.getElementById('current-temperature').textContent = `${Math.round(selectedDayForecast.temp_max)}°C / ${Math.round(selectedDayForecast.temp_min)}°C`;
-            document.getElementById('current-summary').textContent = dailyInterpretation.summary;
-            document.getElementById('current-icon').textContent = dailyInterpretation.icon;
-            
-            document.getElementById('current-wind').textContent = `${selectedDayForecast.max_wind.toFixed(1)} km/h (Max)`;
-            document.getElementById('current-humidity').textContent = `${current.relative_humidity_2m}% (Now)`;
-            document.getElementById('current-max-temp').textContent = `${Math.round(selectedDayForecast.temp_max)}°C`;
-            
-            document.getElementById('current-cloud-cover').innerHTML = `${getCloudCoverIcon(current.cloud_cover)} Cloud Cover: ${current.cloud_cover}% (Now)`;
-            
-            document.getElementById('current-uv-index').textContent = `${selectedDayForecast.uv_index} (${uvInterpretation.description})`;
-            document.getElementById('current-uv-index').className = `text-base font-medium ${uvInterpretation.class}`; 
-            
-            document.getElementById('current-rain-prob-main').textContent = `${selectedDayForecast.rain_prob}%`;
-            const rainAmountText = selectedDayForecast.rain_sum > 0.1 
-                ? `${selectedDayForecast.rain_sum.toFixed(1)} mm`
-                : 'No measurable rain';
-            document.getElementById('current-rain-amount-main').textContent = rainAmountText;
-            
-            // NASA DATA DISPLAY
-            document.getElementById('current-air-quality').textContent = `${airQualityInterpretation.description} (AOD: ${nasaData.airQualityAOD.toFixed(2)})`;
-            document.getElementById('current-air-quality').className = `text-base font-medium ${airQualityInterpretation.class}`;
-            
-            let groundRiskText = `Soil Moisture: ${(nasaData.soilMoisture * 100).toFixed(0)}%`;
-            let groundRiskClass = 'text-gray-800';
-            if (nasaData.hasSnowCover) {
-                groundRiskText = 'SNOW COVER DETECTED ❄️';
-                groundRiskClass = 'text-red-600 font-bold';
-            } else if (nasaData.soilMoisture > 0.8) {
-                 groundRiskText = `Wet Ground (${(nasaData.soilMoisture * 100).toFixed(0)}%)`;
-                 groundRiskClass = 'text-yellow-600 font-bold';
-            }
-            document.getElementById('current-ground-risk').textContent = groundRiskText;
-            document.getElementById('current-ground-risk').className = `text-base font-medium ${groundRiskClass}`;
-            
-            document.getElementById('coordinates').textContent = `Coordinates: Lat ${lat.toFixed(2)}, Lon ${lon.toFixed(2)}, Elev ${weatherData.elevation}m. Forecast uses NOAA GFS data for the selected date.`;
-
-            currentWeatherCard.classList.remove('hidden');
-        }
-        
-        /**
-         * Renders the Celestial Outlook Card.
-         */
-        function renderCelestialOutlook(celestialData) {
-            document.getElementById('celestial-sunrise').textContent = celestialData.sunrise;
-            document.getElementById('celestial-sunset').textContent = celestialData.sunset;
-            document.getElementById('celestial-moon-phase').textContent = celestialData.moonPhase;
-            document.getElementById('celestial-dark-start').textContent = celestialData.darkSkyStart;
-            document.getElementById('celestial-main-event').textContent = celestialData.mainEvent;
-            
-            celestialOutlookCard.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        /**
-         * Renders the 7-day forecast grid.
-         */
-        function renderForecastGrid(dailyData) {
-            forecastGrid.innerHTML = ''; // Clear previous results
-            lastSafetyScores = []; // Reset safety scores for download
-            
-            const times = dailyData.time;
-            
-            for (let i = 0; i < times.length; i++) {
-                const date = new Date(times[i]);
-                const dayName = i === 0 ? 'Today' : date.toLocaleDateString('en-US', { weekday: 'short' });
-                const dateFormatted = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-                const code = dailyData.weather_code[i];
-                const maxTemp = Math.round(dailyData.temperature_2m_max[i]);
-                const minTemp = Math.round(dailyData.temperature_2m_min[i]);
-                const rainProb = dailyData.precipitation_probability_max[i];
-                const maxUv = dailyData.uv_index_max[i];
-                const maxWind = dailyData.wind_speed_10m_max[i]; 
-                
-                // SIMULATED NASA DATA FOR FORECAST CARDS
-                const airQualityAOD_sim = 0.2 + Math.random() * 0.4;
-                const hasSnowCover_sim = dailyData.temperature_2m_min[i] < 0 && dailyData.weather_code[i] >= 70;
-                const soilMoisture_sim = Math.min(1.0, rainProb / 100 + 0.3 + Math.random() * 0.1); 
-
-                const { summary, icon } = getWeatherInterpretation(code);
-
-                const safetyScore = calculateEventSafetyScore(
-                    rainProb, 
-                    maxWind, 
-                    maxUv,
-                    airQualityAOD_sim, 
-                    hasSnowCover_sim, 
-                    soilMoisture_sim   
-                );
-                
-                lastSafetyScores.push(safetyScore); // Store score for download
-
-                let highRiskClass = 'border-gray-200';
-                let scoreBorderColor = 'var(--risk-low)';
-                if (safetyScore.score < 50) {
-                     highRiskClass = 'border-red-400 border-2 shadow-lg shadow-red-200/50';
-                     scoreBorderColor = 'var(--risk-high)';
-                } else if (safetyScore.score < 70) {
-                    highRiskClass = 'border-yellow-400 border-2 shadow-lg shadow-yellow-200/50';
-                    scoreBorderColor = 'var(--risk-moderate)';
-                }
-
-                const rainProbColor = rainProb >= 50 ? 'text-red-600' : 'text-blue-600';
-
-                const cardHtml = `
-                    <div class="forecast-item p-4 rounded-xl text-center flex flex-col items-center ${highRiskClass}">
-                        <p class="text-base font-semibold text-gray-800">${dayName}</p>
-                        <p class="text-xs text-gray-500 mb-2">${dateFormatted}</p>
-                        <span class="text-3xl">${icon}</span>
-                        <p class="text-xs text-gray-600 mt-2">${summary}</p>
-                        <p class="text-lg font-bold mt-1 text-gray-800">${maxTemp}° / ${minTemp}°</p>
-                        
-                        <p class="text-xs text-gray-500 mt-2">Score: 
-                            <span class="font-bold text-lg" style="color:${scoreBorderColor};">${safetyScore.score}%</span>
-                        </p>
-                        
-                        <p class="text-sm font-extrabold ${rainProbColor} mt-1">${rainProb}% Rain</p>
-                    </div>
-                `;
-                forecastGrid.insertAdjacentHTML('beforeend', cardHtml);
-            }
-            forecastHeader.classList.remove('hidden');
-        }
-
-        /**
-         * Displays an error message in the dedicated container.
-         */
-        function displayError(message) {
-            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
-            errorContainer.classList.remove('hidden');
-        }
-
-        /**
-         * Clears all weather display elements.
-         */
-        function clearDisplay() {
-            errorContainer.classList.add('hidden');
-            currentWeatherCard.classList.add('hidden');
-            celestialOutlookCard.classList.add('hidden'); 
-            forecastGrid.innerHTML = '';
-            forecastHeader.classList.add('hidden');
-            loadingSpinner.classList.add('hidden');
-            scoreInfoBox.classList.add('hidden'); 
-            
-             // Reset download data
-            lastWeatherData = null;
-            lastNasaData = null;
-            lastCelestialData = null;
-            lastSafetyScores = [];
-            
-             document.getElementById('safety-score-display').style.setProperty('--score', '0%');
-             document.getElementById('event-safety-score').textContent = '0%';
-             document.getElementById('event-safety-score').nextElementSibling.textContent = 'Ideal Weather';
-        }
-
-        // --- Main Handler ---
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            clearDisplay();
-            loadingSpinner.classList.remove('hidden');
-            searchButton.disabled = true;
-
-            const locationName = locationInput.value.trim();
-            const dateValue = dateInput.value; 
-            
-            if (!locationName) {
-                displayError("Please enter a location name.");
-                loadingSpinner.classList.add('hidden');
-                searchButton.disabled = false;
-                return;
-            }
-
-            if (!dateValue) {
-                displayError("Please select a date for your parade.");
-                loadingSpinner.classList.add('hidden');
-                searchButton.disabled = false;
-                return;
-            }
-
-            try {
-                // 1. Geocode Location
-                const geo = await geocodeLocation(locationName);
-                
-                // 2. Fetch Real Weather Data 
-                const weatherData = await fetchRealWeatherForecast(geo.lat, geo.lon, geo.elevation, dateValue);
-                
-                // 3. Fetch NASA Earth Data (Simulated for Demo)
-                const nasaData = await fetchNasaData(geo.lat, geo.lon, dateValue, weatherData);
-                
-                // Calculate the safety score for the main card (Needs to be done before rendering main card)
-                const todayIndex = weatherData.daily.time.findIndex(t => t === dateValue);
-                const dataIndex = todayIndex !== -1 ? todayIndex : 0;
-                
-                const selectedDayForecast = {
-                    rain_prob: weatherData.daily.precipitation_probability_max[dataIndex],
-                    max_wind: weatherData.daily.wind_speed_10m_max[dataIndex],
-                    uv_index: weatherData.daily.uv_index_max[dataIndex],
-                }
-                const safetyScore = calculateEventSafetyScore(
-                    selectedDayForecast.rain_prob, 
-                    selectedDayForecast.max_wind, 
-                    selectedDayForecast.uv_index,
-                    nasaData.airQualityAOD,
-                    nasaData.hasSnowCover,
-                    nasaData.soilMoisture
-                );
-                
-                // 4. Fetch Celestial Data (Simulated for Demo)
-                const celestialData = await fetchCelestialData(dateValue, geo.lat, geo.lon, weatherData);
-                
-                // Store all data for download
-                lastWeatherData = weatherData;
-                lastNasaData = nasaData;
-                lastCelestialData = celestialData;
-
-                // 5. Render
-                renderCurrentWeather(weatherData, nasaData, safetyScore, geo.name, geo.lat, geo.lon);
-                renderCelestialOutlook(celestialData); 
-                renderForecastGrid(weatherData.daily); // This function populates lastSafetyScores
-
-            } catch (error) {
-                // Handle all errors from geocoding and weather fetch
-                displayError(error.message || "An unexpected error occurred. Check the console for details.");
-                console.error(error);
-            } finally {
-                loadingSpinner.classList.add('hidden');
-                searchButton.disabled = false;
-            }
         });
 
-        // --- Initialization ---
+        const scoreDisplay = document.querySelector('.score-display');
+        let hasAnimated = false;
 
-        window.onload = function() {
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.value = today;
-
-            // Initial mock search to show the UI
-            locationInput.value = 'New York';
-            form.dispatchEvent(new Event('submit', { cancelable: true }));
+        function animateScore() {
+            if (hasAnimated) return;
             
-            lucide.createIcons();
-        };
+            let score = 0;
+            const target = 87;
+            const increment = target / 60;
+            
+            const timer = setInterval(() => {
+                score += increment;
+                if (score >= target) {
+                    score = target;
+                    clearInterval(timer);
+                    hasAnimated = true;
+                }
+                scoreDisplay.textContent = Math.floor(score) + '/100';
+            }, 20);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateScore();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(document.querySelector('.demo-section'));
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            hero.style.opacity = 1 - (scrolled * 0.002);
+        });
     </script>
 </body>
-</html>
+</html> 
