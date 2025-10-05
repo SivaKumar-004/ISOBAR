@@ -62,7 +62,7 @@
 
 
         .hero {
-            padding: 120px 0;
+            padding: 120px 0 60px 0;
             text-align: center;
             position: relative;
         }
@@ -135,6 +135,49 @@
         .source-badge:hover {
             transform: scale(1.1);
             background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sliding-text-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            padding: 20px 0;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 60px;
+            margin: 60px auto 0 auto;
+            max-width: 1100px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .sliding-text-wrapper {
+            display: flex;
+            white-space: nowrap;
+            animation: slideText 20s linear infinite;
+        }
+
+        .sliding-text-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 60px;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .sliding-text-item::before {
+            content: "✨";
+            margin-right: 15px;
+            font-size: 24px;
+        }
+
+        @keyframes slideText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         .features {
@@ -324,6 +367,23 @@
         </div>
     </section>
 
+    <div class="sliding-text-section">
+        <div class="sliding-text-wrapper">
+            <span class="sliding-text-item">Powered by NASA Satellite Data</span>
+            <span class="sliding-text-item">Real-Time Weather Monitoring</span>
+            <span class="sliding-text-item">AI-Driven Safety Predictions</span>
+            <span class="sliding-text-item">99.9% Accuracy Rate</span>
+            <span class="sliding-text-item">Trusted by 10,000+ Event Planners</span>
+            <span class="sliding-text-item">24/7 Alert System</span>
+            <span class="sliding-text-item">Powered by NASA Satellite Data</span>
+            <span class="sliding-text-item">Real-Time Weather Monitoring</span>
+            <span class="sliding-text-item">AI-Driven Safety Predictions</span>
+            <span class="sliding-text-item">99.9% Accuracy Rate</span>
+            <span class="sliding-text-item">Trusted by 10,000+ Event Planners</span>
+            <span class="sliding-text-item">24/7 Alert System</span>
+        </div>
+    </div>
+
     <section class="features" id="features">
         <div class="container">
             <h2>Powerful Features for Event Safety</h2>
@@ -462,5 +522,4 @@
         });
     </script>
 </body>
-</html> 
-
+</html>
